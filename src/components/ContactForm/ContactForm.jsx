@@ -1,5 +1,9 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { addContacts } from 'redux/contactsSlice';
+
 import {
   ContactsForms,
   ContactsLabel,
@@ -8,34 +12,24 @@ import {
   Span,
 } from './ContactsForm.styled';
 
-export const ContactsForm = ({ onAddPhoneBook }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const ContactsForm = () => {
+  const contacts = useSelector(state => state.contacts);
 
-  const inputChange = e => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        break;
-    }
-  };
+  const dispatch = useDispatch();
 
   const formSubmit = e => {
     e.preventDefault();
+    const form = e.target;
+    const name = form.elements.name.value;
+    const number = form.elements.number.value;
 
-    onAddPhoneBook({ name, number });
-    reset();
-  };
+    const filterNameContact = contacts.some(contacts => contacts.name === name);
+    if (filterNameContact) {
+      return toast.error(`${name} is already in contacts.`);
+    }
+    dispatch(addContacts(name, number));
 
-  const reset = () => {
-    setName('');
-    setNumber('');
+    form.reset();
   };
 
   return (
@@ -44,8 +38,6 @@ export const ContactsForm = ({ onAddPhoneBook }) => {
         <ContactsLabel>
           <Span>Name:</Span>
           <ContactsInput
-            onChange={inputChange}
-            value={name}
             type="text"
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' \-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -56,8 +48,6 @@ export const ContactsForm = ({ onAddPhoneBook }) => {
         <ContactsLabel>
           <Span>Phone:</Span>
           <ContactsInput
-            onChange={inputChange}
-            value={number}
             type="tel"
             name="number"
             pattern="\+?\d{1,4}?[ .\-\s]?\(?\d{1,3}?\)?[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,4}[ .\-\s]?\d{1,9}"
@@ -67,10 +57,7 @@ export const ContactsForm = ({ onAddPhoneBook }) => {
         </ContactsLabel>
         <ContactsBtn>Add contact</ContactsBtn>
       </ContactsForms>
+      <ToastContainer position="top-center" theme="colored" />
     </>
   );
-};
-
-ContactsForm.propTypes = {
-  onSubmit: PropTypes.func,
 };
