@@ -6,11 +6,11 @@ const tasksInitialState = {
 
 export const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: tasksInitialState.contacts,
+  initialState: tasksInitialState,
   reducers: {
     addContacts: {
       reducer: (state, action) => {
-        state.push(action.payload);
+        state.contacts.push(action.payload);
       },
       prepare: (name, number) => {
         const id = nanoid();
@@ -18,7 +18,7 @@ export const contactsSlice = createSlice({
       },
     },
     deleteContact(state, action) {
-      return state.filter(contact => contact.id !== action.payload);
+      return state.contacts.filter(contact => contact.id !== action.payload);
     },
   },
 });

@@ -13,7 +13,7 @@ import {
 } from './ContactsForm.styled';
 
 export const ContactsForm = () => {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.contacts);
 
   const dispatch = useDispatch();
 

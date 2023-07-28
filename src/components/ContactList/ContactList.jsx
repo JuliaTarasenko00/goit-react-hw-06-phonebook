@@ -9,8 +9,9 @@ import {
 import { deleteContact } from 'redux/contactsSlice';
 
 export const ContactList = () => {
-  const contacts = useSelector(state => state.contacts);
+  const contacts = useSelector(state => state.contacts.contacts);
   const filter = useSelector(state => state.filters);
+  console.log('filter: ', filter);
   const dispatch = useDispatch();
 
   const contactsFilteredByName = contacts?.filter(contact =>

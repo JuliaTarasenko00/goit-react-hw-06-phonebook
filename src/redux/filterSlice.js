@@ -5,11 +5,11 @@ const tasksInitialState = {
 };
 
 export const contactsFilter = createSlice({
-  name: 'filterContacts',
+  name: 'filters',
   initialState: tasksInitialState.filters,
   reducers: {
-    filterContacts(_, action) {
-      return action.payload;
+    filterContacts: (state, action) => {
+      return (state = action.payload);
     },
   },
 });
