@@ -6,18 +6,20 @@ import {
   ContactBtn,
   ContactListUl,
 } from './Contact.styled';
+
 import { deleteContact } from 'redux/contactsSlice';
 
 export const ContactList = () => {
   const contacts = useSelector(state => state.contacts.contacts);
+
   const filter = useSelector(state => state.filters);
-  console.log('filter: ', filter);
   const dispatch = useDispatch();
 
   const contactsFilteredByName = contacts?.filter(contact =>
     contact.name.toLowerCase().includes(filter)
   );
 
+  const deleteContacts = id => dispatch(deleteContact(id));
   return (
     <>
       {contactsFilteredByName.length === 0 && (
@@ -30,10 +32,7 @@ export const ContactList = () => {
           <Contact key={id}>
             <ContactTitle>• {name}:</ContactTitle>
             <p>{number}</p>
-            <ContactBtn
-              type="button"
-              onClick={() => dispatch(deleteContact(id))}
-            >
+            <ContactBtn type="button" onClick={() => deleteContacts(id)}>
               Delete
             </ContactBtn>
           </Contact>
